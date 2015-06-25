@@ -19,7 +19,13 @@ Mongo.prototype.find = function(hash, fieldMask, options, cb){
   }
   intArgs[intArgs.length-1] = interimCb;
   this.db.find.apply(this.db, intArgs);
-}
+};
+
+Mongo.prototype.findAndModify = function(hash, sort, update, options, cb){
+  var intArgs = mongo5Arguments(arguments);
+  this.db.findAndModify.apply(this.db, intArgs);
+  //return cb(null, '1');
+};
 
 Mongo.prototype.findById = function(id, fieldMask, options, cb){
   var intArgs = mongo4Arguments(arguments);
@@ -112,6 +118,9 @@ Mongo.prototype.getNewId = function(options){
 
 }
 
+function mongo5Arguments(arguments){
+  return mongoArguments(arguments, 5);
+}
 
 function mongo4Arguments(arguments){
   return mongoArguments(arguments, 4);
