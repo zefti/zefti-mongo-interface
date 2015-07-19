@@ -27,46 +27,54 @@ Mongo.prototype.findAndModify = function(hash, sort, update, options, cb){
   //return cb(null, '1');
 };
 
+
 Mongo.prototype.findById = function(id, fieldMask, options, cb){
   var intArgs = mongo4Arguments(arguments);
   if (typeof intArgs[0] === 'string') intArgs[0] = {_id:intArgs[0]};
-  this.db.find.apply(this.db, intArgs);
-}
+  this.find.apply(this, intArgs);
+};
+
+Mongo.prototype.findByIdMulti = function(ids, fieldMask, options, cb){
+  var intArgs = mongo4Arguments(arguments);
+  intArgs[0] = {_id:{$in:ids}};
+  this.find.apply(this, intArgs);
+};
 
 Mongo.prototype.upsert = function(hash, update, options, cb){
   var intArgs = mongo4Arguments(arguments);
   intArgs[2].upsert = true;
   this.db.update.apply(this.db, intArgs);
-}
+};
 
 Mongo.prototype.update = function(hash, update, options, cb){
   var intArgs = mongo4Arguments(arguments);
   this.db.update.apply(this.db, intArgs);
-}
+};
 
 Mongo.prototype.updateById = function(id, update, options, cb){
   var intArgs = mongo4Arguments(arguments);
+  intArgs[1] = {$set:update};
   if (typeof intArgs[0] === 'string') intArgs[0] = {_id:intArgs[0]};
   this.db.update.apply(this.db, intArgs);
-}
+};
 
 Mongo.prototype.remove = function(hash, options, cb){
   var intArgs = mongo3Arguments(arguments);
   this.db.update.apply(this.db, intArgs);
-}
+};
 
 Mongo.prototype.removeById = function(id, options, cb){
   var intArgs = mongo3Arguments(arguments);
   if (typeof intArgs[0] === 'string') intArgs[0] = {_id:intArgs[0]};
   this.db.update.apply(this.db, intArgs);
-}
+};
 
 Mongo.prototype.removeFields = function(hash, update, options, cb){
   var intArgs = mongo4Arguments(arguments);
   var removeUpdate = {$unset:update};
   intArgs[1] = removeUpdate;
   this.db.update.apply(this.db, intArgs);
-}
+};
 
 Mongo.prototype.removeFieldsById = function(id, fields, options, cb){
   var intArgs = mongo4Arguments(arguments);
@@ -74,7 +82,7 @@ Mongo.prototype.removeFieldsById = function(id, fields, options, cb){
   intArgs[1] = removeUpdate;
   if (typeof intArgs[0] === 'string') intArgs[0] = {_id:intArgs[0]};
   this.db.update.apply(this.db, intArgs);
-}
+};
 
 Mongo.prototype.addToSet = function(hash, update, options, cb){
   var intArgs = mongo4Arguments(arguments);
