@@ -30,7 +30,18 @@ Mongo.prototype.findAndModify = function(hash, sort, update, options, cb){
 
 Mongo.prototype.findById = function(id, fieldMask, options, cb){
   var intArgs = mongo4Arguments(arguments);
+  var cbOrig = intArgs[intArgs.length -1];
   if (typeof intArgs[0] === 'string') intArgs[0] = {_id:intArgs[0]};
+
+  var interimCb = function(err, result){
+    if (!err && result.length > 1){
+      var err = 'findById found 2 results';
+    } else {
+      result = result[0];
+    }
+    cbOrig(err, result);
+  };
+  intArgs[intArgs.length -1] = interimCb
   this.find.apply(this, intArgs);
 };
 
