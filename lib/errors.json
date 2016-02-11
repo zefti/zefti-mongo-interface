@@ -1,0 +1,29 @@
+{
+  "errorCodes": {
+    "56b7104cb6a6115737f29ebe": {
+      "eMsg": "tbd",
+      "description": "",
+      "sev": 2
+    },
+    "56b7104cb6a6115737f29ebf": {
+      "eMsg": "tbd",
+      "description": "",
+      "sev": 2
+    },
+    "56b7104cb6a6115737f29ec0": {
+      "eMsg": "tbd",
+      "description": "",
+      "sev": 2
+    },
+    "56b7104cb6a6115737f29ec1": {
+      "eMsg": "tbd",
+      "description": "",
+      "sev": 2
+    },
+    "56b7104cb6a6115737f29ec2": {
+      "eMsg": "tbd",
+      "description": "",
+      "sev": 2
+    }
+  }
+}
