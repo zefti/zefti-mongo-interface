@@ -1,8 +1,8 @@
 {
   "errorCodes": {
     "56b7104cb6a6115737f29ebe": {
-      "eMsg": "tbd",
-      "description": "",
+      "eMsg": "Cannot match with yourself",
+      "description": "The myId and targetId must be different, cannot match with the same person",
       "sev": 2
     },
     "56b7104cb6a6115737f29ebf": {

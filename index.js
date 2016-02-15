@@ -4,19 +4,26 @@ var Mongo = function(db){
   return this;
 };
 
-Mongo.prototype.create = function(hash, options, cb){
+Mongo.prototype.create = function(){
   var intArgs = mongo3Arguments(arguments);
+  var cb = intArgs[intArgs.length-1];
+  var hash = intArgs[0];
+  var interimCb = function(err, result){
+    if(!err && result.result && result.result.ok) return cb(null, hash);
+    return cb(err, result);
+  };
+  intArgs[intArgs.length-1] = interimCb;
   this.db.insert.apply(this.db, intArgs);
 };
 
-Mongo.prototype.find = function(hash, fieldMask, options, cb){
+Mongo.prototype.find = function(){
   var intArgs = mongo4Arguments(arguments);
-  cb = intArgs[intArgs.length-1];
+  var cb = intArgs[intArgs.length-1];
   var interimCb = function(err, result){
     result.toArray(function(err, result2){
       cb(err, result2);
     });
-  }
+  };
   intArgs[intArgs.length-1] = interimCb;
   this.db.find.apply(this.db, intArgs);
 };
@@ -75,17 +82,20 @@ Mongo.prototype.findByIdMulti = function(ids, fieldMask, options, cb){
 };
 
 Mongo.prototype.upsert = function(hash, update, options, cb){
+  //TODO: allow $set and $unset combined
   var intArgs = mongo4Arguments(arguments);
   intArgs[2].upsert = true;
   this.db.update.apply(this.db, intArgs);
 };
 
 Mongo.prototype.update = function(hash, update, options, cb){
+  //TODO: allow $set and $unset combined
   var intArgs = mongo4Arguments(arguments);
   this.db.update.apply(this.db, intArgs);
 };
 
 Mongo.prototype.updateById = function(id, update, options, cb){
+  //TODO: allow $set and $unset combined
   var intArgs = mongo4Arguments(arguments);
   intArgs[1] = {$set:update};
   if (typeof intArgs[0] === 'string') intArgs[0] = {_id:intArgs[0]};
@@ -94,13 +104,13 @@ Mongo.prototype.updateById = function(id, update, options, cb){
 
 Mongo.prototype.remove = function(hash, options, cb){
   var intArgs = mongo3Arguments(arguments);
-  this.db.update.apply(this.db, intArgs);
+  this.db.remove.apply(this.db, intArgs);
 };
 
 Mongo.prototype.removeById = function(id, options, cb){
   var intArgs = mongo3Arguments(arguments);
   if (typeof intArgs[0] === 'string') intArgs[0] = {_id:intArgs[0]};
-  this.db.update.apply(this.db, intArgs);
+  this.db.remove.apply(this.db, intArgs);
 };
 
 Mongo.prototype.removeFields = function(hash, update, options, cb){
