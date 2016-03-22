@@ -4,6 +4,10 @@ var Mongo = function(db){
   return this;
 };
 
+Mongo.prototype.count = function(){
+  this.db.count.apply(this.db, arguments);
+};
+
 Mongo.prototype.create = function(){
   var intArgs = mongo3Arguments(arguments);
   var cb = intArgs[intArgs.length-1];
